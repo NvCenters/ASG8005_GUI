@@ -34,7 +34,7 @@ dicts = {'CH1': '0.xlsx', 'CH2': '0.xlsx', 'CH3': '0.xlsx', 'CH4': '0.xlsx', 'CH
 channels = ['CH1', 'CH2', 'CH3', 'CH4', 'CH5', 'CH6', 'CH7', 'CH8']
 
 root = tk.Tk()
-root.geometry("800x1000")
+root.geometry("1400x1000")
 
 asg_state = tk.StringVar()
 fileCH1 = tk.StringVar()
@@ -780,6 +780,12 @@ tk.Button(root, text='运行', command=running).place(x=244 + 150, y=790, width=
 tk.Button(root, text='停止', command=stopping).place(x=244 + 250, y=790, width=50, height=25)
 tk.Entry(root, textvariable=asg_state).place(x=244 + 350, y=790, width=150, height=25)
 asg = ASG8005()
+
+#绘图
+cv = Canvas(root,bg = 'white',width=594, height=740)
+# 创建一个矩形，坐标为(10,10,110,110)
+
+cv.place(x=244 + 500, y=40)
 
 # 设置回调函数
 asg.set_callback(status_callback)
