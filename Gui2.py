@@ -3,6 +3,17 @@ from tkinter.filedialog import *
 import pandas as pd
 from ASG8005_PythonSDK import *
 
+# 创建画布需要的库
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from itertools import chain
+# 创建工具栏需要的库
+from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk
+import numpy as np
+# 快捷键需要的模块
+from matplotlib.backend_bases import key_press_handler
+
+# 导入绘图需要的模块
+from matplotlib.figure import Figure
 
 global dicts
 global channels
@@ -437,6 +448,7 @@ def connects():
         asg_state.set("connect success")
     if(a == 0):
         asg_state.set("connect fail")
+
 def Download(asg_data1):
     # 连接
 
@@ -489,6 +501,7 @@ def Download(asg_data1):
         asg_state.set("CountContinues fail")
     elif (ASG_countConfigs == 0):
         asg_state.set("countConfigs fail")
+
 def running():
     #print("asg.start(): ", asg.start())
     a = asg.start()
@@ -782,10 +795,54 @@ tk.Entry(root, textvariable=asg_state).place(x=244 + 350, y=790, width=150, heig
 asg = ASG8005()
 
 #绘图
-cv = Canvas(root,bg = 'white',width=594, height=740)
+###############################################################
+#cv = Canvas(root,bg = 'white',width=594, height=740)
 # 创建一个矩形，坐标为(10,10,110,110)
 
-cv.place(x=244 + 500, y=40)
+#cv.place(x=244 + 500, y=40)
+
+
+fig = Figure(figsize=(8, 3), dpi=100,constrained_layout=True)
+
+x = pd.read_excel('CH1.xlsx', header=None)
+x = np.array(x)
+# 然后转化为list形式
+x =x.tolist()
+x = list(chain.from_iterable(x))
+ch1 = [0 for i in range(len(x))]
+for i in range(len(x)):
+    if(i%2)==0:
+        ch1[i] = 1
+for i in range(1,len(x)-1):
+    x[i] = x[i-1] + x[i]
+
+# 利用子图画图
+axc = fig.add_subplot(811)
+axc.plot(x,ch1,drawstyle='steps-pre')
+
+# 创建画布控件
+canvas = FigureCanvasTkAgg(fig, master=root)  # A tk.DrawingArea.
+canvas.draw()
+# 显示画布控件
+canvas.get_tk_widget().place(x=244+410 , y=40)
+
+# 创建工具条控件
+toolbar = NavigationToolbar2Tk(canvas, root)
+toolbar.update()
+# 显示工具条控件
+canvas.get_tk_widget()
+
+
+# 绑定快捷键函数
+def on_key_press(event):
+    print("you pressed {}".format(event.key))
+    key_press_handler(event, canvas, toolbar)
+
+
+# 调用快捷键函数
+canvas.mpl_connect("key_press_event", on_key_press)
+
+###############################################################################
 
 # 设置回调函数
 asg.set_callback(status_callback)
