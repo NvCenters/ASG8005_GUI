@@ -802,7 +802,7 @@ asg = ASG8005()
 #cv.place(x=244 + 500, y=40)
 
 
-fig = Figure(figsize=(8, 3), dpi=100,constrained_layout=True)
+fig = Figure(figsize=(8, 6), dpi=100,constrained_layout=True,facecolor="pink",edgecolor='green',frameon=True)
 
 x = pd.read_excel('CH1.xlsx', header=None)
 x = np.array(x)
@@ -817,14 +817,15 @@ for i in range(1,len(x)-1):
     x[i] = x[i-1] + x[i]
 
 # 利用子图画图
-axc = fig.add_subplot(811)
+axc = fig.add_subplot(111)
+axc.grid(axis="y",c='r')
 axc.plot(x,ch1,drawstyle='steps-pre')
 
 # 创建画布控件
 canvas = FigureCanvasTkAgg(fig, master=root)  # A tk.DrawingArea.
 canvas.draw()
 # 显示画布控件
-canvas.get_tk_widget().place(x=244+410 , y=40)
+canvas.get_tk_widget().place(x=244+450, y=120)
 
 # 创建工具条控件
 toolbar = NavigationToolbar2Tk(canvas, root)
@@ -841,7 +842,14 @@ def on_key_press(event):
 
 # 调用快捷键函数
 canvas.mpl_connect("key_press_event", on_key_press)
-
+tk.Button(root, text='CH1', command=stopping).place(x=244 + 470, y=90, width=100, height=25)
+tk.Button(root, text='CH2', command=stopping).place(x=244 + 470 + 110, y=90, width=100, height=25)
+tk.Button(root, text='CH3', command=stopping).place(x=244 + 470 + 220, y=90, width=100, height=25)
+tk.Button(root, text='CH4', command=stopping).place(x=244 + 470 + 330, y=90, width=100, height=25)
+tk.Button(root, text='CH5', command=stopping).place(x=244 + 470 + 440, y=90, width=100, height=25)
+tk.Button(root, text='CH6', command=stopping).place(x=244 + 470 + 550, y=90, width=100, height=25)
+tk.Button(root, text='CH7', command=stopping).place(x=244 + 470 + 660, y=90, width=100, height=25)
+tk.Button(root, text='CH8', command=stopping).place(x=244 + 470 + 770, y=90, width=100, height=25)
 ###############################################################################
 
 # 设置回调函数
