@@ -11,6 +11,7 @@ from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk
 import numpy as np
 # 快捷键需要的模块
 from matplotlib.backend_bases import key_press_handler
+import matplotlib.pyplot as plt
 
 # 导入绘图需要的模块
 from matplotlib.figure import Figure
@@ -18,6 +19,8 @@ from matplotlib.figure import Figure
 global dicts
 global channels
 global waveformSignal
+global axc
+global fig
 
 @CFUNCTYPE(None, c_int, c_char_p)  # 设置字符串回调函数，要返回固件信息和提示
 def status_callback(type, c_char_buff):
@@ -561,6 +564,32 @@ def documentMerge(localDicts, localChannel):  # 输入值：储存的路径，ch
     #print(type(globals()[localChannel[0]]))
     return Points
 
+def draws(Channels):
+    axc.clear()
+    x = pd.read_excel(dicts[Channels], header=None)
+    x = np.array(x)
+     #然后转化为list形式
+    x = x.tolist()
+    x = list(chain.from_iterable(x))
+    ch1 = [0 for i in range(len(x))]
+    for i in range(len(x)):
+        if (i % 2) == 0:
+            ch1[i] = 1
+    for i in range(1, len(x) - 1):
+        x[i] = x[i - 1] + x[i]
+    axc.grid(axis="y", c='r')
+    axc.plot(x, ch1, drawstyle='steps-pre')
+    canvas = FigureCanvasTkAgg(fig, master=root)  # A tk.DrawingArea.
+    canvas.draw()
+    # 显示画布控件
+    canvas.get_tk_widget().place(x=244 + 450, y=120)
+
+    # 创建工具条控件
+    toolbar = NavigationToolbar2Tk(canvas, root)
+    toolbar.update()
+    # 显示工具条控件
+    canvas.get_tk_widget()
+
 
 tk.Label(root, text='CHANNEL 1').grid(row=1, column=0, padx=5, pady=5)
 tk.Entry(root, textvariable=fileCH1).grid(row=1, column=1, padx=5, pady=5)
@@ -796,60 +825,19 @@ asg = ASG8005()
 
 #绘图
 ###############################################################
-#cv = Canvas(root,bg = 'white',width=594, height=740)
-# 创建一个矩形，坐标为(10,10,110,110)
 
-#cv.place(x=244 + 500, y=40)
+fig = Figure(figsize=(8, 6), dpi=100, constrained_layout=True, facecolor="pink", edgecolor='green', frameon=True)
 
-
-fig = Figure(figsize=(8, 6), dpi=100,constrained_layout=True,facecolor="pink",edgecolor='green',frameon=True)
-
-x = pd.read_excel('CH1.xlsx', header=None)
-x = np.array(x)
-# 然后转化为list形式
-x =x.tolist()
-x = list(chain.from_iterable(x))
-ch1 = [0 for i in range(len(x))]
-for i in range(len(x)):
-    if(i%2)==0:
-        ch1[i] = 1
-for i in range(1,len(x)-1):
-    x[i] = x[i-1] + x[i]
-
-# 利用子图画图
 axc = fig.add_subplot(111)
-axc.grid(axis="y",c='r')
-axc.plot(x,ch1,drawstyle='steps-pre')
 
-# 创建画布控件
-canvas = FigureCanvasTkAgg(fig, master=root)  # A tk.DrawingArea.
-canvas.draw()
-# 显示画布控件
-canvas.get_tk_widget().place(x=244+450, y=120)
-
-# 创建工具条控件
-toolbar = NavigationToolbar2Tk(canvas, root)
-toolbar.update()
-# 显示工具条控件
-canvas.get_tk_widget()
-
-
-# 绑定快捷键函数
-def on_key_press(event):
-    print("you pressed {}".format(event.key))
-    key_press_handler(event, canvas, toolbar)
-
-
-# 调用快捷键函数
-canvas.mpl_connect("key_press_event", on_key_press)
-tk.Button(root, text='CH1', command=stopping).place(x=244 + 470, y=90, width=100, height=25)
-tk.Button(root, text='CH2', command=stopping).place(x=244 + 470 + 110, y=90, width=100, height=25)
-tk.Button(root, text='CH3', command=stopping).place(x=244 + 470 + 220, y=90, width=100, height=25)
-tk.Button(root, text='CH4', command=stopping).place(x=244 + 470 + 330, y=90, width=100, height=25)
-tk.Button(root, text='CH5', command=stopping).place(x=244 + 470 + 440, y=90, width=100, height=25)
-tk.Button(root, text='CH6', command=stopping).place(x=244 + 470 + 550, y=90, width=100, height=25)
-tk.Button(root, text='CH7', command=stopping).place(x=244 + 470 + 660, y=90, width=100, height=25)
-tk.Button(root, text='CH8', command=stopping).place(x=244 + 470 + 770, y=90, width=100, height=25)
+tk.Button(root, text='CH1', command=lambda :draws('CH1')).place(x=244 + 470, y=90, width=100, height=25)
+tk.Button(root, text='CH2', command=lambda :draws('CH2')).place(x=244 + 470 + 110, y=90, width=100, height=25)
+tk.Button(root, text='CH3', command=lambda :draws('CH3')).place(x=244 + 470 + 220, y=90, width=100, height=25)
+tk.Button(root, text='CH4', command=lambda :draws('CH4')).place(x=244 + 470 + 330, y=90, width=100, height=25)
+tk.Button(root, text='CH5', command=lambda :draws('CH5')).place(x=244 + 470 + 440, y=90, width=100, height=25)
+tk.Button(root, text='CH6', command=lambda :draws('CH6')).place(x=244 + 470 + 550, y=90, width=100, height=25)
+tk.Button(root, text='CH7', command=lambda :draws('CH7')).place(x=244 + 470 + 660, y=90, width=100, height=25)
+tk.Button(root, text='CH8', command=lambda :draws('CH8')).place(x=244 + 470 + 770, y=90, width=100, height=25)
 ###############################################################################
 
 # 设置回调函数
