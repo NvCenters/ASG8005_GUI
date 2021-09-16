@@ -830,14 +830,21 @@ fig = Figure(figsize=(8, 6), dpi=100, constrained_layout=True, facecolor="pink",
 
 axc = fig.add_subplot(111)
 
-tk.Button(root, text='CH1', command=lambda :draws('CH1')).place(x=244 + 470, y=90, width=100, height=25)
-tk.Button(root, text='CH2', command=lambda :draws('CH2')).place(x=244 + 470 + 110, y=90, width=100, height=25)
-tk.Button(root, text='CH3', command=lambda :draws('CH3')).place(x=244 + 470 + 220, y=90, width=100, height=25)
-tk.Button(root, text='CH4', command=lambda :draws('CH4')).place(x=244 + 470 + 330, y=90, width=100, height=25)
-tk.Button(root, text='CH5', command=lambda :draws('CH5')).place(x=244 + 470 + 440, y=90, width=100, height=25)
-tk.Button(root, text='CH6', command=lambda :draws('CH6')).place(x=244 + 470 + 550, y=90, width=100, height=25)
-tk.Button(root, text='CH7', command=lambda :draws('CH7')).place(x=244 + 470 + 660, y=90, width=100, height=25)
-tk.Button(root, text='CH8', command=lambda :draws('CH8')).place(x=244 + 470 + 770, y=90, width=100, height=25)
+var=tk.StringVar()
+var.set('Channel 1 waveform')
+tk.Label(root,
+    textvariable=var,    # 标签的文字
+    font=('Arial', 20)    # 字体和字体大
+    ).place(x=244 + 470 + 120, y=50, width=500, height=25)
+
+tk.Button(root, text='CH1', command=lambda :draws('CH1')).place(x=244 + 470 + 80, y=90, width=70, height=25)
+tk.Button(root, text='CH2', command=lambda :draws('CH2')).place(x=244 + 470 + 80 + 80, y=90, width=70, height=25)
+tk.Button(root, text='CH3', command=lambda :draws('CH3')).place(x=244 + 470 + 160 + 80, y=90, width=70, height=25)
+tk.Button(root, text='CH4', command=lambda :draws('CH4')).place(x=244 + 470 + 240 + 80, y=90, width=70, height=25)
+tk.Button(root, text='CH5', command=lambda :draws('CH5')).place(x=244 + 470 + 320 + 80, y=90, width=70, height=25)
+tk.Button(root, text='CH6', command=lambda :draws('CH6')).place(x=244 + 470 + 400 + 80, y=90, width=70, height=25)
+tk.Button(root, text='CH7', command=lambda :draws('CH7')).place(x=244 + 470 + 480 + 80, y=90, width=70, height=25)
+tk.Button(root, text='CH8', command=lambda :draws('CH8')).place(x=244 + 470 + 560 + 80, y=90, width=70, height=25)
 ###############################################################################
 
 # 设置回调函数
